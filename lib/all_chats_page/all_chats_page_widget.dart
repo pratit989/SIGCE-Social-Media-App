@@ -1,5 +1,6 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../components/empty_chats_page_widget.dart';
 import '../flutter_flow/chat/index.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -79,10 +80,7 @@ class _AllChatsPageWidgetState extends State<AllChatsPageWidget> {
                   List<ChatsRecord> listViewChatsRecordList = snapshot.data!;
                   if (listViewChatsRecordList.isEmpty) {
                     return Center(
-                      child: Image.asset(
-                        'assets/images/messagesMainEmpty@2x.png',
-                        width: MediaQuery.of(context).size.width * 0.76,
-                      ),
+                      child: EmptyChatsPageWidget(),
                     );
                   }
                   return ListView.builder(

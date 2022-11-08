@@ -243,9 +243,13 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                                           ),
                                                           Text(
                                                             dateTimeFormat(
-                                                                'relative',
-                                                                listViewStoryCommentsRecord
-                                                                    .timePosted!),
+                                                              'relative',
+                                                              listViewStoryCommentsRecord
+                                                                  .timePosted!,
+                                                              locale: FFLocalizations
+                                                                      .of(context)
+                                                                  .languageCode,
+                                                            ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyText2

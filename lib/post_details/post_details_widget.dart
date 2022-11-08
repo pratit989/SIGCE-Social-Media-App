@@ -221,9 +221,13 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                   12, 0, 0, 0),
                                           child: Text(
                                             dateTimeFormat(
-                                                'relative',
-                                                postDetailsUserPostsRecord
-                                                    .timePosted!),
+                                              'relative',
+                                              postDetailsUserPostsRecord
+                                                  .timePosted!,
+                                              locale:
+                                                  FFLocalizations.of(context)
+                                                      .languageCode,
+                                            ),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1,
                                           ),
@@ -597,8 +601,12 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                                       ),
                                                                       Text(
                                                                         dateTimeFormat(
-                                                                            'relative',
-                                                                            commentListPostCommentsRecord.timePosted!),
+                                                                          'relative',
+                                                                          commentListPostCommentsRecord
+                                                                              .timePosted!,
+                                                                          locale:
+                                                                              FFLocalizations.of(context).languageCode,
+                                                                        ),
                                                                         style: FlutterFlowTheme.of(context)
                                                                             .bodyText2,
                                                                       ),

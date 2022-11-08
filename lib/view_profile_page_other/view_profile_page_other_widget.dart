@@ -841,8 +841,12 @@ class _ViewProfilePageOtherWidgetState
                                                                       child:
                                                                           Text(
                                                                         dateTimeFormat(
-                                                                            'relative',
-                                                                            socialFeedUserPostsRecord.timePosted!),
+                                                                          'relative',
+                                                                          socialFeedUserPostsRecord
+                                                                              .timePosted!,
+                                                                          locale:
+                                                                              FFLocalizations.of(context).languageCode,
+                                                                        ),
                                                                         style: FlutterFlowTheme.of(context)
                                                                             .bodyText1,
                                                                       ),

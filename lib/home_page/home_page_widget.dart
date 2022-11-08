@@ -718,9 +718,14 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                 0, 2, 8, 0),
                                                     child: Text(
                                                       dateTimeFormat(
-                                                          'relative',
-                                                          socialFeedUserPostsRecord
-                                                              .timePosted!),
+                                                        'relative',
+                                                        socialFeedUserPostsRecord
+                                                            .timePosted!,
+                                                        locale:
+                                                            FFLocalizations.of(
+                                                                    context)
+                                                                .languageCode,
+                                                      ),
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
