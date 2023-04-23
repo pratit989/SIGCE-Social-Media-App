@@ -1,11 +1,14 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/empty_chats_page_widget.dart';
-import '../flutter_flow/chat/index.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/empty_chats_page_widget.dart';
+import '/flutter_flow/chat/index.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'all_chats_page_model.dart';
+export 'all_chats_page_model.dart';
 
 class AllChatsPageWidget extends StatefulWidget {
   const AllChatsPageWidget({Key? key}) : super(key: key);
@@ -15,20 +18,30 @@ class AllChatsPageWidget extends StatefulWidget {
 }
 
 class _AllChatsPageWidgetState extends State<AllChatsPageWidget> {
+  late AllChatsPageModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => AllChatsPageModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Title(
         title: 'allChatsPage',
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: FlutterFlowTheme.of(context).primary,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -36,12 +49,12 @@ class _AllChatsPageWidgetState extends State<AllChatsPageWidget> {
             onPressed: () async {
               context.pushNamed('createGroupChat');
             },
-            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-            elevation: 8,
+            backgroundColor: FlutterFlowTheme.of(context).primary,
+            elevation: 8.0,
             child: Icon(
               Icons.add_rounded,
               color: Colors.white,
-              size: 36,
+              size: 36.0,
             ),
           ),
           appBar: AppBar(
@@ -49,15 +62,15 @@ class _AllChatsPageWidgetState extends State<AllChatsPageWidget> {
             automaticallyImplyLeading: false,
             title: Text(
               'Messages',
-              style: FlutterFlowTheme.of(context).title2,
+              style: FlutterFlowTheme.of(context).headlineMedium,
             ),
             actions: [],
             centerTitle: false,
-            elevation: 0,
+            elevation: 0.0,
           ),
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 2.0, 0.0, 0.0),
               child: StreamBuilder<List<ChatsRecord>>(
                 stream: queryChatsRecord(
                   queryBuilder: (chatsRecord) => chatsRecord
@@ -69,10 +82,10 @@ class _AllChatsPageWidgetState extends State<AllChatsPageWidget> {
                   if (!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
-                        width: 50,
-                        height: 50,
+                        width: 50.0,
+                        height: 50.0,
                         child: CircularProgressIndicator(
-                          color: FlutterFlowTheme.of(context).primaryColor,
+                          color: FlutterFlowTheme.of(context).primary,
                         ),
                       ),
                     );
@@ -125,30 +138,29 @@ class _AllChatsPageWidgetState extends State<AllChatsPageWidget> {
                             userProfilePic: chatInfo.chatPreviewPic(),
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
-                            unreadColor:
-                                FlutterFlowTheme.of(context).primaryColor,
+                            unreadColor: FlutterFlowTheme.of(context).primary,
                             titleTextStyle: GoogleFonts.getFont(
                               'Outfit',
                               color: FlutterFlowTheme.of(context).primaryText,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 16.0,
                               fontStyle: FontStyle.normal,
                             ),
                             dateTextStyle: GoogleFonts.getFont(
                               'Urbanist',
                               color: FlutterFlowTheme.of(context).grayIcon,
                               fontWeight: FontWeight.normal,
-                              fontSize: 14,
+                              fontSize: 14.0,
                             ),
                             previewTextStyle: GoogleFonts.getFont(
                               'Urbanist',
                               color: FlutterFlowTheme.of(context).grayIcon,
                               fontWeight: FontWeight.normal,
-                              fontSize: 14,
+                              fontSize: 14.0,
                             ),
-                            contentPadding:
-                                EdgeInsetsDirectional.fromSTEB(12, 3, 3, 3),
-                            borderRadius: BorderRadius.circular(0),
+                            contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                12.0, 3.0, 3.0, 3.0),
+                            borderRadius: BorderRadius.circular(0.0),
                           );
                         },
                       );

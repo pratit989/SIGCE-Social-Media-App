@@ -1,14 +1,14 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/create_modal_widget.dart';
-import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_media_display.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_toggle_icon.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_video_player.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/create_modal_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_media_display.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_toggle_icon.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_video_player.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'home_page_model.dart';
+export 'home_page_model.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -26,6 +29,8 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget>
     with TickerProviderStateMixin {
+  late HomePageModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasIconTriggered = false;
   final animationsMap = {
@@ -37,8 +42,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
           curve: Curves.easeInOut,
           delay: 0.ms,
           duration: 600.ms,
-          begin: 1.2,
-          end: 1,
+          begin: Offset(1.2, 1.2),
+          end: Offset(1.0, 1.0),
         ),
       ],
     ),
@@ -47,6 +52,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => HomePageModel());
+
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
@@ -58,10 +65,17 @@ class _HomePageWidgetState extends State<HomePageWidget>
   }
 
   @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Title(
         title: 'homePage',
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: FlutterFlowTheme.of(context).primary,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -69,12 +83,14 @@ class _HomePageWidgetState extends State<HomePageWidget>
             onPressed: () async {
               await showModalBottomSheet(
                 isScrollControlled: true,
+                backgroundColor: Color(0x00000000),
+                barrierColor: Color(0x00000000),
                 context: context,
-                builder: (context) {
+                builder: (bottomSheetContext) {
                   return Padding(
-                    padding: MediaQuery.of(context).viewInsets,
+                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
                     child: Container(
-                      height: 240,
+                      height: 240.0,
                       child: CreateModalWidget(),
                     ),
                   );
@@ -82,11 +98,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
               ).then((value) => setState(() {}));
             },
             backgroundColor: Color(0xFF4B39EF),
-            elevation: 8,
+            elevation: 8.0,
             child: Icon(
               Icons.create_rounded,
               color: Colors.white,
-              size: 24,
+              size: 24.0,
             ),
           ),
           appBar: AppBar(
@@ -98,70 +114,71 @@ class _HomePageWidgetState extends State<HomePageWidget>
                 if (Theme.of(context).brightness == Brightness.light)
                   Image.asset(
                     'assets/images/logoSniff_dark@3x.png',
-                    width: 120,
-                    height: 50,
+                    width: 120.0,
+                    height: 50.0,
                     fit: BoxFit.fitWidth,
                   ),
                 Text(
                   'SIGCE',
-                  style: FlutterFlowTheme.of(context).title1,
+                  style: FlutterFlowTheme.of(context).displaySmall,
                 ),
               ],
             ),
             actions: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 16, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
                 child: FlutterFlowIconButton(
                   borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  buttonSize: 46,
+                  borderRadius: 30.0,
+                  buttonSize: 46.0,
                   icon: Icon(
-                    Icons.notifications_outlined,
+                    Icons.settings_rounded,
                     color: FlutterFlowTheme.of(context).grayIcon,
-                    size: 24,
+                    size: 24.0,
                   ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
+                  onPressed: () async {
+                    context.pushNamed('editSettings');
                   },
                 ),
               ),
             ],
             centerTitle: false,
-            elevation: 0,
+            elevation: 0.0,
           ),
           body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width * 1.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 3,
+                        blurRadius: 3.0,
                         color: Color(0x3A000000),
-                        offset: Offset(0, 1),
+                        offset: Offset(0.0, 1.0),
                       )
                     ],
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(12),
-                      bottomRight: Radius.circular(12),
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
+                      bottomLeft: Radius.circular(12.0),
+                      bottomRight: Radius.circular(12.0),
+                      topLeft: Radius.circular(0.0),
+                      topRight: Radius.circular(0.0),
                     ),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Container(
-                        height: 72,
+                        height: 72.0,
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 8),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 4.0, 0.0, 8.0),
                           child: StreamBuilder<List<UserStoriesRecord>>(
                             stream: queryUserStoriesRecord(
                               queryBuilder: (userStoriesRecord) =>
@@ -174,11 +191,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               if (!snapshot.hasData) {
                                 return Center(
                                   child: SizedBox(
-                                    width: 50,
-                                    height: 50,
+                                    width: 50.0,
+                                    height: 50.0,
                                     child: CircularProgressIndicator(
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
                                     ),
                                   ),
                                 );
@@ -196,7 +213,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                           listViewIndex];
                                   return Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        8, 0, 8, 0),
+                                        8.0, 0.0, 8.0, 0.0),
                                     child: StreamBuilder<UsersRecord>(
                                       stream: UsersRecord.getDocument(
                                           listViewUserStoriesRecord.user!),
@@ -205,12 +222,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 50,
-                                              height: 50,
+                                              width: 50.0,
+                                              height: 50.0,
                                               child: CircularProgressIndicator(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .primaryColor,
+                                                        .primary,
                                               ),
                                             ),
                                           );
@@ -218,6 +235,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         final columnUsersRecord =
                                             snapshot.data!;
                                         return InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
                                           onTap: () async {
                                             context.pushNamed(
                                               'storyDetails',
@@ -245,8 +266,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Container(
-                                                width: 40,
-                                                height: 40,
+                                                width: 40.0,
+                                                height: 40.0,
                                                 clipBehavior: Clip.antiAlias,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
@@ -262,7 +283,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                               ),
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 4, 0, 0),
+                                                    .fromSTEB(
+                                                        0.0, 4.0, 0.0, 0.0),
                                                 child: AutoSizeText(
                                                   valueOrDefault<String>(
                                                     columnUsersRecord
@@ -274,10 +296,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                   ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       .override(
                                                         fontFamily: 'Urbanist',
-                                                        fontSize: 12,
+                                                        fontSize: 12.0,
                                                       ),
                                                 ),
                                               ),
@@ -297,7 +319,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 32),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
                   child: StreamBuilder<List<UserPostsRecord>>(
                     stream: queryUserPostsRecord(
                       queryBuilder: (userPostsRecord) => userPostsRecord
@@ -309,10 +331,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 50.0,
+                            height: 50.0,
                             child: CircularProgressIndicator(
-                              color: FlutterFlowTheme.of(context).primaryColor,
+                              color: FlutterFlowTheme.of(context).primary,
                             ),
                           ),
                         );
@@ -327,7 +349,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                           final socialFeedUserPostsRecord =
                               socialFeedUserPostsRecordList[socialFeedIndex];
                           return Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 8),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 4.0, 0.0, 8.0),
                             child: StreamBuilder<UsersRecord>(
                               stream: UsersRecord.getDocument(
                                   socialFeedUserPostsRecord.postUser!),
@@ -336,31 +359,36 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                 if (!snapshot.hasData) {
                                   return Center(
                                     child: SizedBox(
-                                      width: 50,
-                                      height: 50,
+                                      width: 50.0,
+                                      height: 50.0,
                                       child: CircularProgressIndicator(
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
+                                            .primary,
                                       ),
                                     ),
                                   );
                                 }
                                 final userPostUsersRecord = snapshot.data!;
                                 return Container(
-                                  width: MediaQuery.of(context).size.width,
+                                  width:
+                                      MediaQuery.of(context).size.width * 1.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
-                                        blurRadius: 4,
+                                        blurRadius: 4.0,
                                         color: Color(0x32000000),
-                                        offset: Offset(0, 2),
+                                        offset: Offset(0.0, 2.0),
                                       )
                                     ],
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(0.0),
                                   ),
                                   child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     onTap: () async {
                                       context.pushNamed(
                                         'postDetails',
@@ -385,13 +413,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 8, 2, 4),
+                                                  0.0, 8.0, 2.0, 4.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
                                                 onTap: () async {
                                                   context.pushNamed(
                                                     'viewProfilePageOther',
@@ -418,7 +451,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  8, 0, 0, 0),
+                                                                  8.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Card(
                                                         clipBehavior: Clip
                                                             .antiAliasWithSaveLayer,
@@ -428,16 +464,20 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             RoundedRectangleBorder(
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(20),
+                                                                  .circular(
+                                                                      20.0),
                                                         ),
                                                         child: Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(1,
-                                                                      1, 1, 1),
+                                                                  .fromSTEB(
+                                                                      1.0,
+                                                                      1.0,
+                                                                      1.0,
+                                                                      1.0),
                                                           child: Container(
-                                                            width: 40,
-                                                            height: 40,
+                                                            width: 40.0,
+                                                            height: 40.0,
                                                             clipBehavior:
                                                                 Clip.antiAlias,
                                                             decoration:
@@ -465,7 +505,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  12, 0, 0, 0),
+                                                                  12.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Text(
                                                         valueOrDefault<String>(
                                                           userPostUsersRecord
@@ -475,7 +518,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .subtitle1,
+                                                                .titleMedium,
                                                       ),
                                                     ),
                                                   ],
@@ -483,14 +526,14 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                               ),
                                               FlutterFlowIconButton(
                                                 borderColor: Colors.transparent,
-                                                borderRadius: 30,
-                                                buttonSize: 46,
+                                                borderRadius: 30.0,
+                                                buttonSize: 46.0,
                                                 icon: Icon(
                                                   Icons.keyboard_control,
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .secondaryText,
-                                                  size: 20,
+                                                  size: 20.0,
                                                 ),
                                                 onPressed: () {
                                                   print(
@@ -507,15 +550,16 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                               CachedNetworkImage(
                                             imageUrl: path,
                                             width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 300,
+                                                    .size
+                                                    .width *
+                                                1.0,
+                                            height: 300.0,
                                             fit: BoxFit.cover,
                                           ),
                                           videoPlayerBuilder: (path) =>
                                               FlutterFlowVideoPlayer(
                                             path: path,
-                                            width: 300,
+                                            width: 300.0,
                                             autoPlay: false,
                                             looping: true,
                                             showControls: true,
@@ -526,7 +570,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  8, 4, 8, 0),
+                                                  8.0, 4.0, 8.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -538,15 +582,15 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                   Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 16, 0),
+                                                            .fromSTEB(0.0, 0.0,
+                                                                16.0, 0.0),
                                                     child: Row(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
                                                       children: [
                                                         Container(
-                                                          width: 41,
-                                                          height: 41,
+                                                          width: 41.0,
+                                                          height: 41.0,
                                                           child: Stack(
                                                             children: [
                                                               if (!socialFeedUserPostsRecord
@@ -557,10 +601,22 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                 Align(
                                                                   alignment:
                                                                       AlignmentDirectional(
-                                                                          0,
+                                                                          0.0,
                                                                           0.25),
                                                                   child:
                                                                       InkWell(
+                                                                    splashColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    focusColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    hoverColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .transparent,
                                                                     onTap:
                                                                         () async {
                                                                       final userPostsUpdateData =
@@ -591,7 +647,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           .favorite_border_rounded,
                                                                       color: Color(
                                                                           0xFF95A1AC),
-                                                                      size: 25,
+                                                                      size:
+                                                                          25.0,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -603,10 +660,22 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                 Align(
                                                                   alignment:
                                                                       AlignmentDirectional(
-                                                                          0,
+                                                                          0.0,
                                                                           0.25),
                                                                   child:
                                                                       InkWell(
+                                                                    splashColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    focusColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    hoverColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .transparent,
                                                                     onTap:
                                                                         () async {
                                                                       final userPostsUpdateData =
@@ -626,7 +695,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           .favorite_border_rounded,
                                                                       color: Color(
                                                                           0xFF4B39EF),
-                                                                      size: 25,
+                                                                      size:
+                                                                          25.0,
                                                                     ),
                                                                   ).animateOnActionTrigger(
                                                                           animationsMap[
@@ -640,8 +710,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(4,
-                                                                      0, 0, 0),
+                                                                  .fromSTEB(
+                                                                      4.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
                                                           child: Text(
                                                             valueOrDefault<
                                                                 String>(
@@ -653,13 +726,14 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyText2
+                                                                .bodySmall
                                                                 .override(
                                                                   fontFamily:
                                                                       'Lexend Deca',
                                                                   color: Color(
                                                                       0xFF8B97A2),
-                                                                  fontSize: 14,
+                                                                  fontSize:
+                                                                      14.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal,
@@ -678,26 +752,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             .mode_comment_outlined,
                                                         color:
                                                             Color(0xFF95A1AC),
-                                                        size: 24,
+                                                        size: 24.0,
                                                       ),
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    4, 0, 0, 0),
+                                                                    4.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Text(
                                                           socialFeedUserPostsRecord
                                                               .numComments!
                                                               .toString(),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .bodyText2
+                                                              .bodySmall
                                                               .override(
                                                                 fontFamily:
                                                                     'Lexend Deca',
                                                                 color: Color(
                                                                     0xFF8B97A2),
-                                                                fontSize: 14,
+                                                                fontSize: 14.0,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -714,8 +791,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                   Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 2, 8, 0),
+                                                            .fromSTEB(0.0, 2.0,
+                                                                8.0, 0.0),
                                                     child: Text(
                                                       dateTimeFormat(
                                                         'relative',
@@ -729,13 +806,19 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Urbanist',
+                                                                color: Color(
+                                                                    0xFF8B97A2),
+                                                              ),
                                                     ),
                                                   ),
                                                   Icon(
                                                     Icons.bookmark_border,
                                                     color: Color(0xFF95A1AC),
-                                                    size: 24,
+                                                    size: 24.0,
                                                   ),
                                                 ],
                                               ),
@@ -745,14 +828,15 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  2, 4, 0, 0),
+                                                  2.0, 4.0, 0.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Expanded(
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(12, 0, 12, 12),
+                                                      .fromSTEB(12.0, 0.0, 12.0,
+                                                          12.0),
                                                   child: Text(
                                                     valueOrDefault<String>(
                                                       socialFeedUserPostsRecord
@@ -761,7 +845,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                     ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                 ),
                                               ),

@@ -1,20 +1,23 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../backend/firebase_storage/storage.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_media_display.dart';
-import '../flutter_flow/flutter_flow_place_picker.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_video_player.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/place.dart';
-import '../flutter_flow/upload_media.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_media_display.dart';
+import '/flutter_flow/flutter_flow_place_picker.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_video_player.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/place.dart';
+import '/flutter_flow/upload_data.dart';
 import 'dart:io';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'create_post_model.dart';
+export 'create_post_model.dart';
 
 class CreatePostWidget extends StatefulWidget {
   const CreatePostWidget({Key? key}) : super(key: key);
@@ -24,23 +27,23 @@ class CreatePostWidget extends StatefulWidget {
 }
 
 class _CreatePostWidgetState extends State<CreatePostWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late CreatePostModel _model;
 
-  TextEditingController? textController;
-  var placePickerValue = FFPlace();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => CreatePostModel());
+
+    _model.textController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -48,7 +51,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
   Widget build(BuildContext context) {
     return Title(
         title: 'createPost',
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: FlutterFlowTheme.of(context).primary,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -57,19 +60,19 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
             automaticallyImplyLeading: false,
             title: Text(
               'Create Post',
-              style: FlutterFlowTheme.of(context).title2,
+              style: FlutterFlowTheme.of(context).headlineMedium,
             ),
             actions: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
                 child: FlutterFlowIconButton(
                   borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  buttonSize: 48,
+                  borderRadius: 30.0,
+                  buttonSize: 48.0,
                   icon: Icon(
                     Icons.close_rounded,
                     color: Color(0xFF95A1AC),
-                    size: 30,
+                    size: 30.0,
                   ),
                   onPressed: () async {
                     context.pop();
@@ -78,7 +81,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
               ),
             ],
             centerTitle: false,
-            elevation: 0,
+            elevation: 0.0,
           ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
@@ -94,21 +97,25 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 12.0),
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Container(
-                                    height: 350,
+                                    height: 350.0,
                                     child: Stack(
                                       children: [
-                                        if (!functions
-                                            .hasUploadedMedia(uploadedFileUrl))
+                                        if (!functions.hasUploadedMedia(
+                                            _model.uploadedFileUrl))
                                           InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
                                             onTap: () async {
                                               final selectedMedia =
                                                   await selectMediaWithSourceBottomSheet(
@@ -120,7 +127,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                                         .dark600,
                                                 textColor:
                                                     FlutterFlowTheme.of(context)
-                                                        .tertiaryColor,
+                                                        .tertiary,
                                                 pickerFontFamily: 'Lexend Deca',
                                               );
                                               if (selectedMedia != null &&
@@ -128,8 +135,10 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                                       validateFileFormat(
                                                           m.storagePath,
                                                           context))) {
-                                                setState(() =>
-                                                    isMediaUploading = true);
+                                                setState(() => _model
+                                                    .isDataUploading = true);
+                                                var selectedUploadedFiles =
+                                                    <FFUploadedFile>[];
                                                 var downloadUrls = <String>[];
                                                 try {
                                                   showUploadMessage(
@@ -137,6 +146,26 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                                     'Uploading file...',
                                                     showLoading: true,
                                                   );
+                                                  selectedUploadedFiles =
+                                                      selectedMedia
+                                                          .map((m) =>
+                                                              FFUploadedFile(
+                                                                name: m
+                                                                    .storagePath
+                                                                    .split('/')
+                                                                    .last,
+                                                                bytes: m.bytes,
+                                                                height: m
+                                                                    .dimensions
+                                                                    ?.height,
+                                                                width: m
+                                                                    .dimensions
+                                                                    ?.width,
+                                                                blurHash:
+                                                                    m.blurHash,
+                                                              ))
+                                                          .toList();
+
                                                   downloadUrls =
                                                       (await Future.wait(
                                                     selectedMedia.map(
@@ -153,28 +182,37 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                                 } finally {
                                                   ScaffoldMessenger.of(context)
                                                       .hideCurrentSnackBar();
-                                                  isMediaUploading = false;
+                                                  _model.isDataUploading =
+                                                      false;
                                                 }
-                                                if (downloadUrls.length ==
-                                                    selectedMedia.length) {
-                                                  setState(() =>
-                                                      uploadedFileUrl =
-                                                          downloadUrls.first);
+                                                if (selectedUploadedFiles
+                                                            .length ==
+                                                        selectedMedia.length &&
+                                                    downloadUrls.length ==
+                                                        selectedMedia.length) {
+                                                  setState(() {
+                                                    _model.uploadedLocalFile =
+                                                        selectedUploadedFiles
+                                                            .first;
+                                                    _model.uploadedFileUrl =
+                                                        downloadUrls.first;
+                                                  });
                                                   showUploadMessage(
                                                       context, 'Success!');
                                                 } else {
                                                   setState(() {});
                                                   showUploadMessage(context,
-                                                      'Failed to upload media');
+                                                      'Failed to upload data');
                                                   return;
                                                 }
                                               }
                                             },
                                             child: Container(
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 350,
+                                                      .size
+                                                      .width *
+                                                  1.0,
+                                              height: 350.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -186,23 +224,24 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                                   ).image,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(0),
+                                                    BorderRadius.circular(0.0),
                                               ),
                                             ),
                                           ),
-                                        if (functions
-                                            .hasUploadedMedia(uploadedFileUrl))
+                                        if (functions.hasUploadedMedia(
+                                            _model.uploadedFileUrl))
                                           Align(
                                             alignment:
-                                                AlignmentDirectional(0, 0),
+                                                AlignmentDirectional(0.0, 0.0),
                                             child: FlutterFlowMediaDisplay(
-                                              path: uploadedFileUrl,
+                                              path: _model.uploadedFileUrl,
                                               imageBuilder: (path) =>
                                                   Image.network(
                                                 path,
                                                 width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
+                                                        .size
+                                                        .width *
+                                                    1.0,
                                                 height: double.infinity,
                                                 fit: BoxFit.cover,
                                               ),
@@ -210,8 +249,9 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                                   FlutterFlowVideoPlayer(
                                                 path: path,
                                                 width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
+                                                        .size
+                                                        .width *
+                                                    1.0,
                                                 autoPlay: false,
                                                 looping: true,
                                                 showControls: true,
@@ -225,66 +265,68 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 4, 0, 0),
+                                        0.0, 4.0, 0.0, 0.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Expanded(
                                           child: TextFormField(
-                                            controller: textController,
+                                            controller: _model.textController,
                                             obscureText: false,
                                             decoration: InputDecoration(
                                               hintText: 'Comment....',
                                               hintStyle:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyText2,
+                                                      .bodySmall,
                                               enabledBorder:
                                                   UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .primaryBackground,
-                                                  width: 1,
+                                                  width: 1.0,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(0),
+                                                    BorderRadius.circular(0.0),
                                               ),
                                               focusedBorder:
                                                   UnderlineInputBorder(
                                                 borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  width: 1,
+                                                  color: Color(0x00000000),
+                                                  width: 1.0,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(0),
+                                                    BorderRadius.circular(0.0),
                                               ),
                                               errorBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(0x00000000),
-                                                  width: 1,
+                                                  width: 1.0,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(0),
+                                                    BorderRadius.circular(0.0),
                                               ),
                                               focusedErrorBorder:
                                                   UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(0x00000000),
-                                                  width: 1,
+                                                  width: 1.0,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(0),
+                                                    BorderRadius.circular(0.0),
                                               ),
                                               contentPadding:
                                                   EdgeInsetsDirectional
-                                                      .fromSTEB(20, 20, 20, 12),
+                                                      .fromSTEB(20.0, 20.0,
+                                                          20.0, 12.0),
                                             ),
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                                .bodyMedium,
                                             textAlign: TextAlign.start,
                                             maxLines: 4,
+                                            validator: _model
+                                                .textControllerValidator
+                                                .asValidator(context),
                                           ),
                                         ),
                                       ],
@@ -305,26 +347,27 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                             androidGoogleMapsApiKey: '',
                             webGoogleMapsApiKey: '',
                             onSelect: (place) async {
-                              setState(() => placePickerValue = place);
+                              setState(() => _model.placePickerValue = place);
                             },
                             defaultText: 'Location',
                             icon: Icon(
                               Icons.place,
                               color: FlutterFlowTheme.of(context).grayIcon,
-                              size: 24,
+                              size: 24.0,
                             ),
                             buttonOptions: FFButtonOptions(
-                              width: 300,
-                              height: 60,
+                              width: 300.0,
+                              height: 60.0,
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
-                              textStyle: FlutterFlowTheme.of(context).subtitle2,
+                              textStyle:
+                                  FlutterFlowTheme.of(context).titleSmall,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
-                                width: 2,
+                                width: 2.0,
                               ),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
                         ],
@@ -334,23 +377,23 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 40),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
                 child: Container(
                   width: double.infinity,
-                  height: 100,
+                  height: 100.0,
                   constraints: BoxConstraints(
-                    maxWidth: 200,
-                    maxHeight: 50,
+                    maxWidth: 200.0,
+                    maxHeight: 50.0,
                   ),
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(50),
+                    color: FlutterFlowTheme.of(context).primary,
+                    borderRadius: BorderRadius.circular(50.0),
                   ),
                   child: FFButtonWidget(
                     onPressed: () async {
                       final userPostsCreateData = createUserPostsRecordData(
-                        postPhoto: uploadedFileUrl,
-                        postDescription: textController!.text,
+                        postPhoto: _model.uploadedFileUrl,
+                        postDescription: _model.textController.text,
                         postUser: currentUserReference,
                         postTitle: '',
                         timePosted: getCurrentTimestamp,
@@ -373,22 +416,26 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                     },
                     text: 'Create Post',
                     options: FFButtonOptions(
-                      width: 270,
-                      height: 50,
-                      color: FlutterFlowTheme.of(context).primaryColor,
+                      width: 270.0,
+                      height: 50.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: FlutterFlowTheme.of(context).primary,
                       textStyle:
-                          FlutterFlowTheme.of(context).subtitle2.override(
+                          FlutterFlowTheme.of(context).titleSmall.override(
                                 fontFamily: 'Outfit',
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
-                      elevation: 0,
+                      elevation: 0.0,
                       borderSide: BorderSide(
                         color: Colors.transparent,
-                        width: 1,
+                        width: 1.0,
                       ),
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(50.0),
                     ),
                   ),
                 ),

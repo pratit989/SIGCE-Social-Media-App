@@ -1,7 +1,10 @@
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'create_modal_model.dart';
+export 'create_modal_model.dart';
 
 class CreateModalWidget extends StatefulWidget {
   const CreateModalWidget({Key? key}) : super(key: key);
@@ -11,11 +14,27 @@ class CreateModalWidget extends StatefulWidget {
 }
 
 class _CreateModalWidgetState extends State<CreateModalWidget> {
+  late CreateModalModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => CreateModalModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
   }
 
   @override
@@ -27,9 +46,9 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
         color: FlutterFlowTheme.of(context).secondaryBackground,
         boxShadow: [
           BoxShadow(
-            blurRadius: 3,
+            blurRadius: 3.0,
             color: Color(0x33000000),
-            offset: Offset(0, -1),
+            offset: Offset(0.0, -1.0),
           )
         ],
       ),
@@ -37,8 +56,12 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
             child: InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onTap: () async {
                 context.pushNamed(
                   'createStory',
@@ -57,15 +80,15 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   boxShadow: [
                     BoxShadow(
-                      blurRadius: 3,
+                      blurRadius: 3.0,
                       color: Color(0x3E000000),
-                      offset: Offset(0, 2),
+                      offset: Offset(0.0, 2.0),
                     )
                   ],
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 12, 8, 12),
+                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 12.0, 8.0, 12.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -75,19 +98,19 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 4),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 0.0, 4.0),
                             child: Text(
                               'Create Story',
-                              style: FlutterFlowTheme.of(context).title3,
+                              style: FlutterFlowTheme.of(context).headlineSmall,
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Share a video of your pup.',
-                              style: FlutterFlowTheme.of(context).bodyText2,
+                              style: FlutterFlowTheme.of(context).bodySmall,
                             ),
                           ),
                         ],
@@ -99,55 +122,57 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
             ),
           ),
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
             child: Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              height: 0,
+              height: 0.0,
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).dark600,
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 3,
+                    blurRadius: 3.0,
                     color: Color(0x3E000000),
-                    offset: Offset(0, 2),
+                    offset: Offset(0.0, 2.0),
                   )
                 ],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.0),
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(8, 8, 16, 8),
+                padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 16.0, 8.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 16, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 0.0, 0.0),
                               child: Text(
                                 'Create Post',
                                 style: FlutterFlowTheme.of(context)
-                                    .title3
+                                    .headlineSmall
                                     .override(
                                       fontFamily: 'Urbanist',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color:
+                                          FlutterFlowTheme.of(context).tertiary,
                                     ),
                               ),
                             ),
                             Expanded(
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 0.0, 0.0),
                                 child: Text(
                                   'Share a photo that will appear in the timeline.',
-                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
                                 ),
                               ),
                             ),
@@ -161,6 +186,10 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
             ),
           ),
           InkWell(
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onTap: () async {
               context.pushNamed(
                 'createPost',
@@ -179,15 +208,15 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
                 color: FlutterFlowTheme.of(context).primaryBackground,
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 3,
+                    blurRadius: 3.0,
                     color: Color(0x3E000000),
-                    offset: Offset(0, 2),
+                    offset: Offset(0.0, 2.0),
                   )
                 ],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.0),
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(8, 12, 8, 12),
+                padding: EdgeInsetsDirectional.fromSTEB(8.0, 12.0, 8.0, 12.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -198,19 +227,19 @@ class _CreateModalWidgetState extends State<CreateModalWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 4),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 0.0, 4.0),
                             child: Text(
                               'Create Post',
-                              style: FlutterFlowTheme.of(context).title3,
+                              style: FlutterFlowTheme.of(context).headlineSmall,
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Share photos on your timeline.',
-                              style: FlutterFlowTheme.of(context).bodyText2,
+                              style: FlutterFlowTheme.of(context).bodySmall,
                             ),
                           ),
                         ],

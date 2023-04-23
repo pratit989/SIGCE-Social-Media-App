@@ -1,12 +1,15 @@
-import '../backend/backend.dart';
-import '../flutter_flow/chat/index.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
+import 'create_group_chat_model.dart';
+export 'create_group_chat_model.dart';
 
 class CreateGroupChatWidget extends StatefulWidget {
   const CreateGroupChatWidget({Key? key}) : super(key: key);
@@ -16,32 +19,23 @@ class CreateGroupChatWidget extends StatefulWidget {
 }
 
 class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
-  Map<UsersRecord, bool> checkboxListTileValueMap = {};
-  List<UsersRecord> get checkboxListTileCheckedItems =>
-      checkboxListTileValueMap.entries
-          .where((e) => e.value)
-          .map((e) => e.key)
-          .toList();
+  late CreateGroupChatModel _model;
 
-  PagingController<DocumentSnapshot?, UsersRecord>? _pagingController;
-  Query? _pagingQuery;
-  List<StreamSubscription?> _streamSubscriptions = [];
-
-  TextEditingController? textController;
-  ChatsRecord? groupChat;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => CreateGroupChatModel());
+
+    _model.textController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    _streamSubscriptions.forEach((s) => s?.cancel());
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -49,7 +43,7 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
   Widget build(BuildContext context) {
     return Title(
         title: 'createGroupChat',
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: FlutterFlowTheme.of(context).primary,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -58,12 +52,12 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
             automaticallyImplyLeading: false,
             leading: FlutterFlowIconButton(
               borderColor: Colors.transparent,
-              borderRadius: 30,
-              buttonSize: 24,
+              borderRadius: 30.0,
+              buttonSize: 24.0,
               icon: Icon(
                 Icons.arrow_back_rounded,
                 color: FlutterFlowTheme.of(context).secondaryText,
-                size: 24,
+                size: 24.0,
               ),
               onPressed: () async {
                 context.pop();
@@ -75,48 +69,48 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
               children: [
                 Text(
                   'Create Group Chat',
-                  style: FlutterFlowTheme.of(context).subtitle1,
+                  style: FlutterFlowTheme.of(context).titleMedium,
                 ),
                 Text(
                   'Select the friends to add to chat.',
-                  style: FlutterFlowTheme.of(context).bodyText2,
+                  style: FlutterFlowTheme.of(context).bodySmall,
                 ),
               ],
             ),
             actions: [],
             centerTitle: false,
-            elevation: 0,
+            elevation: 0.0,
           ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
                 width: double.infinity,
-                height: 50,
+                height: 50.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   boxShadow: [
                     BoxShadow(
-                      blurRadius: 3,
+                      blurRadius: 3.0,
                       color: FlutterFlowTheme.of(context).secondaryBackground,
-                      offset: Offset(0, 2),
+                      offset: Offset(0.0, 2.0),
                     )
                   ],
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadius.circular(0.0),
                 ),
-                alignment: AlignmentDirectional(0, 0),
+                alignment: AlignmentDirectional(0.0, 0.0),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 1, 0, 1),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 1.0, 0.0, 1.0),
                   child: TextFormField(
-                    controller: textController,
+                    controller: _model.textController,
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'Search for friends...',
-                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(4.0),
@@ -126,7 +120,7 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(4.0),
@@ -136,7 +130,7 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(4.0),
@@ -146,7 +140,7 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                       focusedErrorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(4.0),
@@ -157,14 +151,16 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                       fillColor:
                           FlutterFlowTheme.of(context).secondaryBackground,
                       contentPadding:
-                          EdgeInsetsDirectional.fromSTEB(24, 14, 0, 0),
+                          EdgeInsetsDirectional.fromSTEB(24.0, 14.0, 0.0, 0.0),
                       prefixIcon: Icon(
                         Icons.search_outlined,
                         color: FlutterFlowTheme.of(context).secondaryText,
-                        size: 24,
+                        size: 24.0,
                       ),
                     ),
-                    style: FlutterFlowTheme.of(context).bodyText1,
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    validator:
+                        _model.textControllerValidator.asValidator(context),
                   ),
                 ),
               ),
@@ -173,91 +169,97 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                   pagingController: () {
                     final Query<Object?> Function(Query<Object?>) queryBuilder =
                         (usersRecord) => usersRecord;
-                    if (_pagingController != null) {
+                    if (_model.pagingController != null) {
                       final query = queryBuilder(UsersRecord.collection);
-                      if (query != _pagingQuery) {
+                      if (query != _model.pagingQuery) {
                         // The query has changed
-                        _pagingQuery = query;
-                        _streamSubscriptions.forEach((s) => s?.cancel());
-                        _streamSubscriptions.clear();
-                        _pagingController!.refresh();
+                        _model.pagingQuery = query;
+                        _model.streamSubscriptions.forEach((s) => s?.cancel());
+                        _model.streamSubscriptions.clear();
+                        _model.pagingController!.refresh();
                       }
-                      return _pagingController!;
+                      return _model.pagingController!;
                     }
 
-                    _pagingController = PagingController(firstPageKey: null);
-                    _pagingQuery = queryBuilder(UsersRecord.collection);
-                    _pagingController!.addPageRequestListener((nextPageMarker) {
+                    _model.pagingController =
+                        PagingController(firstPageKey: null);
+                    _model.pagingQuery = queryBuilder(UsersRecord.collection);
+                    _model.pagingController!
+                        .addPageRequestListener((nextPageMarker) {
                       queryUsersRecordPage(
                         queryBuilder: (usersRecord) => usersRecord,
                         nextPageMarker: nextPageMarker,
                         pageSize: 25,
                         isStream: true,
                       ).then((page) {
-                        _pagingController!.appendPage(
+                        _model.pagingController!.appendPage(
                           page.data,
                           page.nextPageMarker,
                         );
                         final streamSubscription =
                             page.dataStream?.listen((data) {
-                          final itemIndexes = _pagingController!.itemList!
-                              .asMap()
-                              .map((k, v) => MapEntry(v.reference.id, k));
                           data.forEach((item) {
+                            final itemIndexes = _model
+                                .pagingController!.itemList!
+                                .asMap()
+                                .map((k, v) => MapEntry(v.reference.id, k));
                             final index = itemIndexes[item.reference.id];
-                            final items = _pagingController!.itemList!;
+                            final items = _model.pagingController!.itemList!;
                             if (index != null) {
                               items.replaceRange(index, index + 1, [item]);
-                              _pagingController!.itemList = {
+                              _model.pagingController!.itemList = {
                                 for (var item in items) item.reference: item
                               }.values.toList();
                             }
                           });
                           setState(() {});
                         });
-                        _streamSubscriptions.add(streamSubscription);
+                        _model.streamSubscriptions.add(streamSubscription);
                       });
                     });
-                    return _pagingController!;
+                    return _model.pagingController!;
                   }(),
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
+                  reverse: false,
                   scrollDirection: Axis.vertical,
                   builderDelegate: PagedChildBuilderDelegate<UsersRecord>(
                     // Customize what your widget looks like when it's loading the first page.
                     firstPageProgressIndicatorBuilder: (_) => Center(
                       child: SizedBox(
-                        width: 50,
-                        height: 50,
+                        width: 50.0,
+                        height: 50.0,
                         child: CircularProgressIndicator(
-                          color: FlutterFlowTheme.of(context).primaryColor,
+                          color: FlutterFlowTheme.of(context).primary,
                         ),
                       ),
                     ),
 
                     itemBuilder: (context, _, listViewIndex) {
                       final listViewUsersRecord =
-                          _pagingController!.itemList![listViewIndex];
+                          _model.pagingController!.itemList![listViewIndex];
                       return Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
                         child: Container(
                           width: double.infinity,
-                          height: 70,
+                          height: 70.0,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                             boxShadow: [
                               BoxShadow(
-                                blurRadius: 0,
+                                blurRadius: 0.0,
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
-                                offset: Offset(0, 2),
+                                offset: Offset(0.0, 2.0),
                               )
                             ],
-                            borderRadius: BorderRadius.circular(0),
+                            borderRadius: BorderRadius.circular(0.0),
                           ),
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                8.0, 0.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -265,14 +267,14 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   color: Color(0xFF4E39F9),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(40.0),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        2, 2, 2, 2),
+                                        2.0, 2.0, 2.0, 2.0),
                                     child: Container(
-                                      width: 50,
-                                      height: 50,
+                                      width: 50.0,
+                                      height: 50.0,
                                       clipBehavior: Clip.antiAlias,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
@@ -286,7 +288,7 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        2, 0, 0, 0),
+                                        2.0, 0.0, 0.0, 0.0),
                                     child: Theme(
                                       data: ThemeData(
                                         unselectedWidgetColor:
@@ -294,29 +296,28 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                                                 .secondaryText,
                                       ),
                                       child: CheckboxListTile(
-                                        value: checkboxListTileValueMap[
+                                        value: _model.checkboxListTileValueMap[
                                             listViewUsersRecord] ??= false,
                                         onChanged: (newValue) async {
-                                          setState(() =>
-                                              checkboxListTileValueMap[
-                                                      listViewUsersRecord] =
-                                                  newValue!);
+                                          setState(() => _model
+                                                  .checkboxListTileValueMap[
+                                              listViewUsersRecord] = newValue!);
                                         },
                                         title: Text(
                                           listViewUsersRecord.displayName!,
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle1,
+                                              .titleMedium,
                                         ),
                                         subtitle: Text(
                                           listViewUsersRecord.email!,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText2,
+                                              .bodySmall,
                                         ),
                                         activeColor:
                                             FlutterFlowTheme.of(context)
-                                                .primaryColor,
+                                                .primary,
                                         checkColor: FlutterFlowTheme.of(context)
-                                            .tertiaryColor,
+                                            .tertiary,
                                         dense: false,
                                         controlAffinity:
                                             ListTileControlAffinity.trailing,
@@ -335,29 +336,30 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
               ),
               Container(
                 width: double.infinity,
-                height: 100,
+                height: 100.0,
                 decoration: BoxDecoration(
                   color: Color(0xFF4E39F9),
                   boxShadow: [
                     BoxShadow(
-                      blurRadius: 4,
+                      blurRadius: 4.0,
                       color: Color(0x3314181B),
-                      offset: Offset(0, -2),
+                      offset: Offset(0.0, -2.0),
                     )
                   ],
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0),
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(0.0),
+                    bottomRight: Radius.circular(0.0),
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 34),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 34.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      groupChat = await FFChatManager.instance.createChat(
-                        checkboxListTileCheckedItems
+                      _model.groupChat =
+                          await FFChatManager.instance.createChat(
+                        _model.checkboxListTileCheckedItems
                             .map((e) => e.reference)
                             .toList(),
                       );
@@ -368,7 +370,7 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                         'chatPage',
                         queryParams: {
                           'chatRef': serializeParam(
-                            groupChat!.reference,
+                            _model.groupChat!.reference,
                             ParamType.DocumentReference,
                           ),
                         }.withoutNulls,
@@ -378,20 +380,26 @@ class _CreateGroupChatWidgetState extends State<CreateGroupChatWidget> {
                     },
                     text: 'Create Chat',
                     options: FFButtonOptions(
-                      width: 130,
-                      height: 40,
+                      width: 130.0,
+                      height: 40.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       color: Color(0xFF4E39F9),
-                      textStyle: FlutterFlowTheme.of(context).title3.override(
-                            fontFamily: 'Lexend Deca',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      textStyle:
+                          FlutterFlowTheme.of(context).headlineSmall.override(
+                                fontFamily: 'Lexend Deca',
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w500,
+                              ),
+                      elevation: 2.0,
                       borderSide: BorderSide(
                         color: Colors.transparent,
-                        width: 1,
+                        width: 1.0,
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
                 ),

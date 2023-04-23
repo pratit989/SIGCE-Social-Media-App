@@ -1,16 +1,19 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/delete_post_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_toggle_icon.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/delete_post_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_toggle_icon.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'post_details_model.dart';
+export 'post_details_model.dart';
 
 class PostDetailsWidget extends StatefulWidget {
   const PostDetailsWidget({
@@ -27,19 +30,23 @@ class PostDetailsWidget extends StatefulWidget {
 }
 
 class _PostDetailsWidgetState extends State<PostDetailsWidget> {
-  TextEditingController? textController;
+  late PostDetailsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => PostDetailsModel());
+
+    _model.textController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -52,10 +59,10 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).primary,
               ),
             ),
           );
@@ -63,7 +70,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
         final postDetailsUserPostsRecord = snapshot.data!;
         return Title(
             title: 'postDetails',
-            color: FlutterFlowTheme.of(context).primaryColor,
+            color: FlutterFlowTheme.of(context).primary,
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -80,27 +87,28 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                             Stack(
                               children: [
                                 Container(
-                                  width: MediaQuery.of(context).size.width,
+                                  width:
+                                      MediaQuery.of(context).size.width * 1.0,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(0.0),
                                     child: CachedNetworkImage(
                                       imageUrl: valueOrDefault<String>(
                                         postDetailsUserPostsRecord.postPhoto,
                                         'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-social-app-tx2kqp/assets/ot903vcfouv7/oscar-sutton-yihlaRCCvd4-unsplash.jpg',
                                       ),
-                                      width: 100,
-                                      height: 430,
+                                      width: 100.0,
+                                      height: 430.0,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 12, 16, 0),
+                                      16.0, 12.0, 16.0, 0.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
@@ -112,17 +120,17 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                         color: Color(0x3F000000),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(40),
+                                              BorderRadius.circular(40.0),
                                         ),
                                         child: FlutterFlowIconButton(
                                           borderColor: Colors.transparent,
-                                          borderRadius: 30,
-                                          buttonSize: 46,
+                                          borderRadius: 30.0,
+                                          buttonSize: 46.0,
                                           icon: Icon(
                                             Icons.arrow_back_rounded,
                                             color: FlutterFlowTheme.of(context)
-                                                .tertiaryColor,
-                                            size: 24,
+                                                .tertiary,
+                                            size: 24.0,
                                           ),
                                           onPressed: () async {
                                             context.pop();
@@ -134,27 +142,30 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                           true)
                                         FlutterFlowIconButton(
                                           borderColor: Colors.transparent,
-                                          borderRadius: 30,
-                                          borderWidth: 1,
-                                          buttonSize: 44,
+                                          borderRadius: 30.0,
+                                          borderWidth: 1.0,
+                                          buttonSize: 44.0,
                                           fillColor: Color(0x41000000),
                                           icon: Icon(
                                             Icons.more_vert_sharp,
                                             color: FlutterFlowTheme.of(context)
-                                                .tertiaryColor,
-                                            size: 24,
+                                                .tertiary,
+                                            size: 24.0,
                                           ),
                                           onPressed: () async {
                                             await showModalBottomSheet(
                                               isScrollControlled: true,
+                                              backgroundColor:
+                                                  Color(0x00000000),
+                                              barrierColor: Color(0x00000000),
                                               context: context,
-                                              builder: (context) {
+                                              builder: (bottomSheetContext) {
                                                 return Padding(
-                                                  padding:
-                                                      MediaQuery.of(context)
-                                                          .viewInsets,
+                                                  padding: MediaQuery.of(
+                                                          bottomSheetContext)
+                                                      .viewInsets,
                                                   child: Container(
-                                                    height: 250,
+                                                    height: 250.0,
                                                     child: DeletePostWidget(
                                                       postParameters:
                                                           postDetailsUserPostsRecord,
@@ -171,8 +182,8 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                               ],
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 8.0, 16.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -180,14 +191,14 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     color: Color(0xFF4B39EF),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(20.0),
                                     ),
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          1, 1, 1, 1),
+                                          1.0, 1.0, 1.0, 1.0),
                                       child: Container(
-                                        width: 40,
-                                        height: 40,
+                                        width: 40.0,
+                                        height: 40.0,
                                         clipBehavior: Clip.antiAlias,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
@@ -208,17 +219,17 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             widget.userRecord!.userName!,
                                             style: FlutterFlowTheme.of(context)
-                                                .subtitle1,
+                                                .titleMedium,
                                           ),
                                         ),
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             dateTimeFormat(
                                               'relative',
@@ -229,7 +240,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                       .languageCode,
                                             ),
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                                .bodyMedium,
                                           ),
                                         ),
                                       ],
@@ -239,8 +250,8 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 4, 16, 8),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 4.0, 16.0, 8.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -253,15 +264,15 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                         replacement: '…',
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
+                                          .bodyMedium,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 4, 16, 6),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 4.0, 16.0, 6.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -272,7 +283,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 16, 0),
+                                            0.0, 0.0, 16.0, 0.0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
@@ -308,20 +319,20 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                 Icons.favorite_rounded,
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .primaryColor,
-                                                size: 25,
+                                                        .primary,
+                                                size: 25.0,
                                               ),
                                               offIcon: Icon(
                                                 Icons.favorite_border_rounded,
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .secondaryText,
-                                                size: 25,
+                                                size: 25.0,
                                               ),
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(4, 0, 0, 0),
+                                                  .fromSTEB(4.0, 0.0, 0.0, 0.0),
                                               child: Text(
                                                 functions
                                                     .likes(
@@ -329,7 +340,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                     .toString(),
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText2,
+                                                        .bodySmall,
                                               ),
                                             ),
                                           ],
@@ -342,19 +353,19 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                             Icons.mode_comment_outlined,
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryText,
-                                            size: 24,
+                                            size: 24.0,
                                           ),
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    4, 0, 0, 0),
+                                                    4.0, 0.0, 0.0, 0.0),
                                             child: Text(
                                               postDetailsUserPostsRecord
                                                   .numComments!
                                                   .toString(),
                                               style:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyText2,
+                                                      .bodySmall,
                                             ),
                                           ),
                                         ],
@@ -368,7 +379,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                         Icons.ios_share,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
-                                        size: 24,
+                                        size: 24.0,
                                       ),
                                     ],
                                   ),
@@ -376,7 +387,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                               ),
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
@@ -386,17 +397,17 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 12, 16, 12),
+                                        16.0, 12.0, 16.0, 12.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
                                           'Comments',
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText2
+                                              .bodySmall
                                               .override(
                                                 fontFamily: 'Urbanist',
-                                                fontSize: 12,
+                                                fontSize: 12.0,
                                               ),
                                         ),
                                       ],
@@ -418,12 +429,12 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 50,
-                                            height: 50,
+                                            width: 50.0,
+                                            height: 50.0,
                                             child: CircularProgressIndicator(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryColor,
+                                                      .primary,
                                             ),
                                           ),
                                         );
@@ -440,7 +451,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                     .size
                                                     .width *
                                                 0.7,
-                                            height: 270,
+                                            height: 270.0,
                                           ),
                                         );
                                       }
@@ -455,7 +466,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                           return Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 0, 2),
+                                                    0.0, 0.0, 0.0, 2.0),
                                             child: StreamBuilder<UsersRecord>(
                                               stream: UsersRecord.getDocument(
                                                   commentListPostCommentsRecord
@@ -465,14 +476,14 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                 if (!snapshot.hasData) {
                                                   return Center(
                                                     child: SizedBox(
-                                                      width: 50,
-                                                      height: 50,
+                                                      width: 50.0,
+                                                      height: 50.0,
                                                       child:
                                                           CircularProgressIndicator(
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .primaryColor,
+                                                                .primary,
                                                       ),
                                                     ),
                                                   );
@@ -481,8 +492,9 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                     snapshot.data!;
                                                 return Container(
                                                   width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
+                                                          .size
+                                                          .width *
+                                                      1.0,
                                                   decoration: BoxDecoration(
                                                     color: FlutterFlowTheme.of(
                                                             context)
@@ -492,18 +504,19 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .primaryBackground,
-                                                        offset: Offset(0, 1),
+                                                        offset:
+                                                            Offset(0.0, 1.0),
                                                       )
                                                     ],
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            0),
+                                                            0.0),
                                                   ),
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                8, 12, 8, 12),
+                                                            .fromSTEB(8.0, 12.0,
+                                                                8.0, 12.0),
                                                     child: Row(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
@@ -512,8 +525,8 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                               .start,
                                                       children: [
                                                         Container(
-                                                          width: 40,
-                                                          height: 40,
+                                                          width: 40.0,
+                                                          height: 40.0,
                                                           clipBehavior:
                                                               Clip.antiAlias,
                                                           decoration:
@@ -536,10 +549,10 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        12,
-                                                                        0,
-                                                                        0,
-                                                                        0),
+                                                                        12.0,
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0),
                                                             child: Column(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -557,30 +570,30 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                                   ),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .subtitle1,
+                                                                      .titleMedium,
                                                                 ),
                                                                 Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          0,
-                                                                          4,
-                                                                          0,
-                                                                          0),
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
                                                                   child: Text(
                                                                     commentListPostCommentsRecord
                                                                         .comment!,
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .bodyText1,
+                                                                        .bodyMedium,
                                                                   ),
                                                                 ),
                                                                 Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          0,
-                                                                          4,
-                                                                          0,
-                                                                          0),
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
                                                                   child: Row(
                                                                     mainAxisSize:
                                                                         MainAxisSize
@@ -588,15 +601,15 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                                     children: [
                                                                       Padding(
                                                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            0,
-                                                                            0,
-                                                                            4,
-                                                                            0),
+                                                                            0.0,
+                                                                            0.0,
+                                                                            4.0,
+                                                                            0.0),
                                                                         child:
                                                                             Text(
                                                                           'Posted',
                                                                           style:
-                                                                              FlutterFlowTheme.of(context).bodyText1,
+                                                                              FlutterFlowTheme.of(context).bodyMedium,
                                                                         ),
                                                                       ),
                                                                       Text(
@@ -608,7 +621,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                                                               FFLocalizations.of(context).languageCode,
                                                                         ),
                                                                         style: FlutterFlowTheme.of(context)
-                                                                            .bodyText2,
+                                                                            .bodySmall,
                                                                       ),
                                                                     ],
                                                                   ),
@@ -636,27 +649,28 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                          12.0, 12.0, 12.0, 12.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 12.0),
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
                                 boxShadow: [
                                   BoxShadow(
-                                    blurRadius: 3,
+                                    blurRadius: 3.0,
                                     color: Color(0x3A000000),
-                                    offset: Offset(0, 1),
+                                    offset: Offset(0.0, 1.0),
                                   )
                                 ],
-                                borderRadius: BorderRadius.circular(40),
+                                borderRadius: BorderRadius.circular(40.0),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -664,19 +678,19 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 4, 0, 4),
+                                          16.0, 4.0, 0.0, 4.0),
                                       child: TextFormField(
-                                        controller: textController,
+                                        controller: _model.textController,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           hintText: 'Comment here...',
                                           hintStyle:
                                               FlutterFlowTheme.of(context)
-                                                  .bodyText2,
+                                                  .bodySmall,
                                           enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                               color: Color(0x00000000),
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                             borderRadius:
                                                 const BorderRadius.only(
@@ -687,7 +701,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                               color: Color(0x00000000),
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                             borderRadius:
                                                 const BorderRadius.only(
@@ -698,7 +712,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                           errorBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                               color: Color(0x00000000),
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                             borderRadius:
                                                 const BorderRadius.only(
@@ -710,7 +724,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                               UnderlineInputBorder(
                                             borderSide: BorderSide(
                                               color: Color(0x00000000),
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                             borderRadius:
                                                 const BorderRadius.only(
@@ -720,19 +734,22 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyMedium,
+                                        validator: _model
+                                            .textControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 4, 0),
+                                        0.0, 0.0, 4.0, 0.0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
                                         final postCommentsCreateData =
                                             createPostCommentsRecordData(
                                           timePosted: getCurrentTimestamp,
-                                          comment: textController!.text,
+                                          comment: _model.textController.text,
                                           user: currentUserReference,
                                           post: postDetailsUserPostsRecord
                                               .reference,
@@ -751,24 +768,30 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                                       },
                                       text: 'Post',
                                       options: FFButtonOptions(
-                                        width: 70,
-                                        height: 40,
+                                        width: 70.0,
+                                        height: 40.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
                                         color: FlutterFlowTheme.of(context)
                                             .primaryBackground,
                                         textStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2
+                                            .titleSmall
                                             .override(
                                               fontFamily: 'Urbanist',
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryColor,
+                                                      .primary,
                                             ),
-                                        elevation: 0,
+                                        elevation: 0.0,
                                         borderSide: BorderSide(
                                           color: Colors.transparent,
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
                                     ),
                                   ),

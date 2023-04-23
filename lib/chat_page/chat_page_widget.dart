@@ -1,11 +1,14 @@
-import '../backend/backend.dart';
-import '../flutter_flow/chat/index.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'chat_page_model.dart';
+export 'chat_page_model.dart';
 
 class ChatPageWidget extends StatefulWidget {
   const ChatPageWidget({
@@ -22,6 +25,9 @@ class ChatPageWidget extends StatefulWidget {
 }
 
 class _ChatPageWidgetState extends State<ChatPageWidget> {
+  late ChatPageModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   FFChatInfo? _chatInfo;
   bool isGroupChat() {
     if (widget.chatUser == null) {
@@ -33,11 +39,11 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
     return _chatInfo?.isGroupChat ?? false;
   }
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ChatPageModel());
+
     FFChatManager.instance
         .getChatInfo(
       otherUserRecord: widget.chatUser,
@@ -53,10 +59,17 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
   }
 
   @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Title(
         title: 'chatPage',
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: FlutterFlowTheme.of(context).primary,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -65,13 +78,13 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
             automaticallyImplyLeading: false,
             leading: FlutterFlowIconButton(
               borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
+              borderRadius: 30.0,
+              borderWidth: 1.0,
+              buttonSize: 60.0,
               icon: Icon(
                 Icons.arrow_back_rounded,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 24,
+                size: 24.0,
               ),
               onPressed: () async {
                 context.pop();
@@ -82,17 +95,17 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                 if (!isGroupChat())
                   Text(
                     'Group Chat',
-                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Urbanist',
                           color: Colors.black,
-                          fontSize: 16,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                 if (!isGroupChat())
                   Text(
                     widget.chatUser!.displayName!,
-                    style: FlutterFlowTheme.of(context).bodyText1,
+                    style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
               ],
             ),
@@ -100,8 +113,12 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
               Visibility(
                 visible: isGroupChat(),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 20, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 20.0, 0.0),
                   child: InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
                         'addChatUsers',
@@ -119,14 +136,14 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     child: Icon(
                       Icons.person_add,
                       color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24,
+                      size: 24.0,
                     ),
                   ),
                 ),
               ),
             ],
             centerTitle: false,
-            elevation: 2,
+            elevation: 2.0,
           ),
           body: SafeArea(
             child: StreamBuilder<FFChatInfo>(
@@ -140,32 +157,32 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                       allowImages: true,
                       backgroundColor:
                           FlutterFlowTheme.of(context).primaryBackground,
-                      timeDisplaySetting: TimeDisplaySetting.visibleOnTap,
+                      timeDisplaySetting: TimeDisplaySetting.alwaysVisible,
                       currentUserBoxDecoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(
                           color: Colors.transparent,
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       otherUsersBoxDecoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).primaryColor,
+                        color: FlutterFlowTheme.of(context).primary,
                         border: Border.all(
                           color: Colors.transparent,
                         ),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       currentUserTextStyle:
-                          FlutterFlowTheme.of(context).bodyText2.override(
+                          FlutterFlowTheme.of(context).bodySmall.override(
                                 fontFamily: 'Urbanist',
                                 color: FlutterFlowTheme.of(context).alternate,
                               ),
                       otherUsersTextStyle:
-                          FlutterFlowTheme.of(context).bodyText1,
+                          FlutterFlowTheme.of(context).bodyMedium,
                       inputHintTextStyle:
-                          FlutterFlowTheme.of(context).bodyText2,
+                          FlutterFlowTheme.of(context).bodySmall,
                       inputTextStyle:
-                          FlutterFlowTheme.of(context).bodyText1.override(
+                          FlutterFlowTheme.of(context).bodyMedium.override(
                                 fontFamily: 'Urbanist',
                                 color: FlutterFlowTheme.of(context).alternate,
                                 fontWeight: FontWeight.bold,
@@ -177,10 +194,10 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     )
                   : Center(
                       child: SizedBox(
-                        width: 50,
-                        height: 50,
+                        width: 50.0,
+                        height: 50.0,
                         child: CircularProgressIndicator(
-                          color: FlutterFlowTheme.of(context).primaryColor,
+                          color: FlutterFlowTheme.of(context).primary,
                         ),
                       ),
                     ),

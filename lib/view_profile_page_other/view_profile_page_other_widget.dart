@@ -1,14 +1,17 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_toggle_icon.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_toggle_icon.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'view_profile_page_other_model.dart';
+export 'view_profile_page_other_model.dart';
 
 class ViewProfilePageOtherWidget extends StatefulWidget {
   const ViewProfilePageOtherWidget({
@@ -25,13 +28,23 @@ class ViewProfilePageOtherWidget extends StatefulWidget {
 
 class _ViewProfilePageOtherWidgetState
     extends State<ViewProfilePageOtherWidget> {
+  late ViewProfilePageOtherModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ViewProfilePageOtherModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -43,10 +56,10 @@ class _ViewProfilePageOtherWidgetState
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).primary,
               ),
             ),
           );
@@ -54,7 +67,7 @@ class _ViewProfilePageOtherWidgetState
         final viewProfilePageOtherUsersRecord = snapshot.data!;
         return Title(
             title: 'viewProfilePageOther',
-            color: FlutterFlowTheme.of(context).primaryColor,
+            color: FlutterFlowTheme.of(context).primary,
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -64,12 +77,12 @@ class _ViewProfilePageOtherWidgetState
                 automaticallyImplyLeading: false,
                 leading: FlutterFlowIconButton(
                   borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  buttonSize: 46,
+                  borderRadius: 30.0,
+                  buttonSize: 46.0,
                   icon: Icon(
                     Icons.arrow_back_rounded,
                     color: FlutterFlowTheme.of(context).grayIcon,
-                    size: 24,
+                    size: 24.0,
                   ),
                   onPressed: () async {
                     context.pop();
@@ -77,7 +90,7 @@ class _ViewProfilePageOtherWidgetState
                 ),
                 actions: [],
                 centerTitle: false,
-                elevation: 0,
+                elevation: 0.0,
               ),
               body: SafeArea(
                 child: Column(
@@ -87,7 +100,7 @@ class _ViewProfilePageOtherWidgetState
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery.of(context).size.width * 1.0,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
@@ -103,7 +116,7 @@ class _ViewProfilePageOtherWidgetState
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        24, 0, 0, 0),
+                                        24.0, 0.0, 0.0, 0.0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
@@ -119,39 +132,39 @@ class _ViewProfilePageOtherWidgetState
                                           ),
                                           textAlign: TextAlign.start,
                                           style: FlutterFlowTheme.of(context)
-                                              .title3,
+                                              .headlineSmall,
                                         ),
                                         Align(
                                           alignment:
-                                              AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1.0, 0.0),
                                           child: Text(
                                             viewProfilePageOtherUsersRecord
                                                 .email!,
                                             textAlign: TextAlign.start,
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1
+                                                .bodyMedium
                                                 .override(
                                                   fontFamily: 'Lexend Deca',
                                                   color: Color(0xFFEE8B60),
-                                                  fontSize: 14,
+                                                  fontSize: 14.0,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                           ),
                                         ),
                                         Align(
                                           alignment:
-                                              AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1.0, 0.0),
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0, 8, 0, 0),
+                                                    0.0, 8.0, 0.0, 0.0),
                                             child: Text(
                                               viewProfilePageOtherUsersRecord
                                                   .bio!,
                                               textAlign: TextAlign.start,
                                               style:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyText1,
+                                                      .bodyMedium,
                                             ),
                                           ),
                                         ),
@@ -162,32 +175,32 @@ class _ViewProfilePageOtherWidgetState
                                     alignment: AlignmentDirectional(0.85, 0.68),
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 16, 0),
+                                          0.0, 0.0, 16.0, 0.0),
                                       child: Container(
-                                        width: 80,
-                                        height: 80,
+                                        width: 80.0,
+                                        height: 80.0,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
-                                              .primaryColor,
+                                              .primary,
                                           borderRadius:
-                                              BorderRadius.circular(90),
+                                              BorderRadius.circular(90.0),
                                         ),
                                         child: Align(
                                           alignment:
-                                              AlignmentDirectional(0.85, 0),
+                                              AlignmentDirectional(0.85, 0.0),
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    4, 4, 4, 4),
+                                                    4.0, 4.0, 4.0, 4.0),
                                             child: Container(
-                                              width: 90,
-                                              height: 90,
+                                              width: 90.0,
+                                              height: 90.0,
                                               clipBehavior: Clip.antiAlias,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Image.asset(
-                                                'assets/images/iapkm_3.jpg',
+                                                'assets/images/bg8uv_3.jpg',
                                                 fit: BoxFit.fitWidth,
                                               ),
                                             ),
@@ -200,7 +213,7 @@ class _ViewProfilePageOtherWidgetState
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 12, 24, 12),
+                                    24.0, 12.0, 24.0, 12.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
@@ -224,21 +237,28 @@ class _ViewProfilePageOtherWidgetState
                                       },
                                       text: 'Message',
                                       options: FFButtonOptions(
-                                        width: 270,
-                                        height: 40,
+                                        width: 270.0,
+                                        height: 40.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
+                                            .primary,
                                         textStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2
+                                            .titleSmall
                                             .override(
                                               fontFamily: 'Urbanist',
                                               color: Colors.white,
                                             ),
+                                        elevation: 2.0,
                                         borderSide: BorderSide(
                                           color: Colors.transparent,
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(30),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
                                       ),
                                     ),
                                   ],
@@ -255,31 +275,34 @@ class _ViewProfilePageOtherWidgetState
                         initialIndex: 0,
                         child: Column(
                           children: [
-                            TabBar(
-                              labelColor:
-                                  FlutterFlowTheme.of(context).primaryColor,
-                              unselectedLabelColor:
-                                  FlutterFlowTheme.of(context).grayIcon,
-                              labelStyle:
-                                  FlutterFlowTheme.of(context).subtitle1,
-                              indicatorColor:
-                                  FlutterFlowTheme.of(context).primaryColor,
-                              indicatorWeight: 2,
-                              tabs: [
-                                Tab(
-                                  text: 'Profiles',
-                                ),
-                                Tab(
-                                  text: 'Posts',
-                                ),
-                              ],
+                            Align(
+                              alignment: Alignment(0.0, 0),
+                              child: TabBar(
+                                labelColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                unselectedLabelColor:
+                                    FlutterFlowTheme.of(context).grayIcon,
+                                labelStyle:
+                                    FlutterFlowTheme.of(context).titleMedium,
+                                indicatorColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                indicatorWeight: 2.0,
+                                tabs: [
+                                  Tab(
+                                    text: 'Profiles',
+                                  ),
+                                  Tab(
+                                    text: 'Posts',
+                                  ),
+                                ],
+                              ),
                             ),
                             Expanded(
                               child: TabBarView(
                                 children: [
                                   Container(
-                                    width: 100,
-                                    height: 100,
+                                    width: 100.0,
+                                    height: 100.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryBackground,
@@ -291,12 +314,12 @@ class _ViewProfilePageOtherWidgetState
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 50,
-                                              height: 50,
+                                              width: 50.0,
+                                              height: 50.0,
                                               child: CircularProgressIndicator(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .primaryColor,
+                                                        .primary,
                                               ),
                                             ),
                                           );
@@ -317,23 +340,25 @@ class _ViewProfilePageOtherWidgetState
                                                     columnIndex];
                                             return Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(16, 12, 16, 0),
+                                                  .fromSTEB(
+                                                      16.0, 12.0, 16.0, 0.0),
                                               child: Container(
                                                 width: double.infinity,
-                                                height: 100,
+                                                height: 100.0,
                                                 decoration: BoxDecoration(
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .secondaryBackground,
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      blurRadius: 3,
+                                                      blurRadius: 3.0,
                                                       color: Color(0x32000000),
-                                                      offset: Offset(0, 1),
+                                                      offset: Offset(0.0, 1.0),
                                                     )
                                                   ],
                                                   borderRadius:
-                                                      BorderRadius.circular(8),
+                                                      BorderRadius.circular(
+                                                          8.0),
                                                 ),
                                                 child: Row(
                                                   mainAxisSize:
@@ -343,19 +368,23 @@ class _ViewProfilePageOtherWidgetState
                                                       borderRadius:
                                                           BorderRadius.only(
                                                         bottomLeft:
-                                                            Radius.circular(8),
+                                                            Radius.circular(
+                                                                8.0),
                                                         bottomRight:
-                                                            Radius.circular(0),
+                                                            Radius.circular(
+                                                                0.0),
                                                         topLeft:
-                                                            Radius.circular(8),
+                                                            Radius.circular(
+                                                                8.0),
                                                         topRight:
-                                                            Radius.circular(0),
+                                                            Radius.circular(
+                                                                0.0),
                                                       ),
                                                       child: Image.network(
                                                         viewProfilePageOtherUsersRecord
                                                             .photoUrl!,
-                                                        width: 100,
-                                                        height: 100,
+                                                        width: 100.0,
+                                                        height: 100.0,
                                                         fit: BoxFit.cover,
                                                       ),
                                                     ),
@@ -363,7 +392,10 @@ class _ViewProfilePageOtherWidgetState
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  12, 0, 0, 0),
+                                                                  12.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -379,16 +411,16 @@ class _ViewProfilePageOtherWidgetState
                                                                 .displayName!,
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .title3,
+                                                                .headlineSmall,
                                                           ),
                                                           Padding(
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0,
-                                                                        4,
-                                                                        0,
-                                                                        0),
+                                                                        0.0,
+                                                                        4.0,
+                                                                        0.0,
+                                                                        0.0),
                                                             child: Row(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -397,16 +429,16 @@ class _ViewProfilePageOtherWidgetState
                                                                 Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          0,
-                                                                          4,
-                                                                          0,
-                                                                          0),
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
                                                                   child: Text(
                                                                     viewProfilePageOtherUsersRecord
                                                                         .userName!,
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .bodyText2,
+                                                                        .bodySmall,
                                                                   ),
                                                                 ),
                                                               ],
@@ -441,12 +473,12 @@ class _ViewProfilePageOtherWidgetState
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 50,
-                                            height: 50,
+                                            width: 50.0,
+                                            height: 50.0,
                                             child: CircularProgressIndicator(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryColor,
+                                                      .primary,
                                             ),
                                           ),
                                         );
@@ -463,7 +495,7 @@ class _ViewProfilePageOtherWidgetState
                                                     .size
                                                     .width *
                                                 0.5,
-                                            height: 400,
+                                            height: 400.0,
                                           ),
                                         );
                                       }
@@ -478,7 +510,7 @@ class _ViewProfilePageOtherWidgetState
                                                     socialFeedIndex];
                                             return Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 4, 0, 8),
+                                                  .fromSTEB(0.0, 4.0, 0.0, 8.0),
                                               child: StreamBuilder<UsersRecord>(
                                                 stream: UsersRecord.getDocument(
                                                     socialFeedUserPostsRecord
@@ -488,13 +520,13 @@ class _ViewProfilePageOtherWidgetState
                                                   if (!snapshot.hasData) {
                                                     return Center(
                                                       child: SizedBox(
-                                                        width: 50,
-                                                        height: 50,
+                                                        width: 50.0,
+                                                        height: 50.0,
                                                         child:
                                                             CircularProgressIndicator(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .primaryColor,
+                                                              .primary,
                                                         ),
                                                       ),
                                                     );
@@ -504,26 +536,36 @@ class _ViewProfilePageOtherWidgetState
                                                   return Container(
                                                     width:
                                                         MediaQuery.of(context)
-                                                            .size
-                                                            .width,
+                                                                .size
+                                                                .width *
+                                                            1.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .tertiaryColor,
+                                                              .tertiary,
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          blurRadius: 4,
+                                                          blurRadius: 4.0,
                                                           color:
                                                               Color(0x32000000),
-                                                          offset: Offset(0, 2),
+                                                          offset:
+                                                              Offset(0.0, 2.0),
                                                         )
                                                       ],
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              0),
+                                                              0.0),
                                                     ),
                                                     child: InkWell(
+                                                      splashColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      highlightColor:
+                                                          Colors.transparent,
                                                       onTap: () async {
                                                         context.pushNamed(
                                                           'postDetails',
@@ -557,10 +599,10 @@ class _ViewProfilePageOtherWidgetState
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0,
-                                                                        8,
-                                                                        2,
-                                                                        4),
+                                                                        0.0,
+                                                                        8.0,
+                                                                        2.0,
+                                                                        4.0),
                                                             child: Row(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -572,10 +614,10 @@ class _ViewProfilePageOtherWidgetState
                                                                 Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          8,
-                                                                          0,
-                                                                          0,
-                                                                          0),
+                                                                          8.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
                                                                   child: Card(
                                                                     clipBehavior:
                                                                         Clip.antiAliasWithSaveLayer,
@@ -585,22 +627,21 @@ class _ViewProfilePageOtherWidgetState
                                                                         RoundedRectangleBorder(
                                                                       borderRadius:
                                                                           BorderRadius.circular(
-                                                                              20),
+                                                                              20.0),
                                                                     ),
                                                                     child:
                                                                         Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              1,
-                                                                              1,
-                                                                              1,
-                                                                              1),
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                                                          1.0,
+                                                                          1.0,
+                                                                          1.0,
+                                                                          1.0),
                                                                       child:
                                                                           Container(
                                                                         width:
-                                                                            40,
+                                                                            40.0,
                                                                         height:
-                                                                            40,
+                                                                            40.0,
                                                                         clipBehavior:
                                                                             Clip.antiAlias,
                                                                         decoration:
@@ -633,10 +674,10 @@ class _ViewProfilePageOtherWidgetState
                                                                     children: [
                                                                       Padding(
                                                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            12,
-                                                                            0,
-                                                                            0,
-                                                                            0),
+                                                                            12.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                         child:
                                                                             Text(
                                                                           valueOrDefault<
@@ -645,11 +686,11 @@ class _ViewProfilePageOtherWidgetState
                                                                             'myUsername',
                                                                           ),
                                                                           style: FlutterFlowTheme.of(context)
-                                                                              .bodyText1
+                                                                              .bodyMedium
                                                                               .override(
                                                                                 fontFamily: 'Lexend Deca',
                                                                                 color: Color(0xFF090F13),
-                                                                                fontSize: 14,
+                                                                                fontSize: 14.0,
                                                                                 fontWeight: FontWeight.normal,
                                                                               ),
                                                                         ),
@@ -658,9 +699,9 @@ class _ViewProfilePageOtherWidgetState
                                                                         borderColor:
                                                                             Colors.transparent,
                                                                         borderRadius:
-                                                                            30,
+                                                                            30.0,
                                                                         buttonSize:
-                                                                            46,
+                                                                            46.0,
                                                                         icon:
                                                                             Icon(
                                                                           Icons
@@ -668,7 +709,7 @@ class _ViewProfilePageOtherWidgetState
                                                                           color:
                                                                               Color(0xFF262D34),
                                                                           size:
-                                                                              20,
+                                                                              20.0,
                                                                         ),
                                                                         onPressed:
                                                                             () {
@@ -686,7 +727,7 @@ class _ViewProfilePageOtherWidgetState
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
-                                                                        0),
+                                                                        0.0),
                                                             child:
                                                                 CachedNetworkImage(
                                                               imageUrl:
@@ -696,12 +737,12 @@ class _ViewProfilePageOtherWidgetState
                                                                     .postPhoto,
                                                                 'https://d.newsweek.com/en/full/1310267/best-hawaii-beaches.jpg',
                                                               ),
-                                                              width:
-                                                                  MediaQuery.of(
+                                                              width: MediaQuery.of(
                                                                           context)
                                                                       .size
-                                                                      .width,
-                                                              height: 300,
+                                                                      .width *
+                                                                  1.0,
+                                                              height: 300.0,
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
@@ -709,10 +750,10 @@ class _ViewProfilePageOtherWidgetState
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        8,
-                                                                        4,
-                                                                        8,
-                                                                        0),
+                                                                        8.0,
+                                                                        4.0,
+                                                                        8.0,
+                                                                        0.0),
                                                             child: Row(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -727,12 +768,11 @@ class _ViewProfilePageOtherWidgetState
                                                                           .max,
                                                                   children: [
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              0,
-                                                                              0,
-                                                                              16,
-                                                                              0),
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          16.0,
+                                                                          0.0),
                                                                       child:
                                                                           Row(
                                                                         mainAxisSize:
@@ -760,31 +800,31 @@ class _ViewProfilePageOtherWidgetState
                                                                                 Icon(
                                                                               Icons.favorite_rounded,
                                                                               color: Color(0xFF4B39EF),
-                                                                              size: 25,
+                                                                              size: 25.0,
                                                                             ),
                                                                             offIcon:
                                                                                 Icon(
                                                                               Icons.favorite_border,
                                                                               color: Color(0xFF95A1AC),
-                                                                              size: 25,
+                                                                              size: 25.0,
                                                                             ),
                                                                           ),
                                                                           Padding(
                                                                             padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                4,
-                                                                                0,
-                                                                                0,
-                                                                                0),
+                                                                                4.0,
+                                                                                0.0,
+                                                                                0.0,
+                                                                                0.0),
                                                                             child:
                                                                                 Text(
                                                                               valueOrDefault<String>(
                                                                                 functions.likes(socialFeedUserPostsRecord).toString(),
                                                                                 '0',
                                                                               ),
-                                                                              style: FlutterFlowTheme.of(context).bodyText2.override(
+                                                                              style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                     fontFamily: 'Lexend Deca',
                                                                                     color: Color(0xFF8B97A2),
-                                                                                    fontSize: 14,
+                                                                                    fontSize: 14.0,
                                                                                     fontWeight: FontWeight.normal,
                                                                                   ),
                                                                             ),
@@ -803,21 +843,21 @@ class _ViewProfilePageOtherWidgetState
                                                                           color:
                                                                               Color(0xFF95A1AC),
                                                                           size:
-                                                                              24,
+                                                                              24.0,
                                                                         ),
                                                                         Padding(
                                                                           padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              4,
-                                                                              0,
-                                                                              0,
-                                                                              0),
+                                                                              4.0,
+                                                                              0.0,
+                                                                              0.0,
+                                                                              0.0),
                                                                           child:
                                                                               Text(
                                                                             socialFeedUserPostsRecord.numComments!.toString(),
-                                                                            style: FlutterFlowTheme.of(context).bodyText2.override(
+                                                                            style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                   fontFamily: 'Lexend Deca',
                                                                                   color: Color(0xFF8B97A2),
-                                                                                  fontSize: 14,
+                                                                                  fontSize: 14.0,
                                                                                   fontWeight: FontWeight.normal,
                                                                                 ),
                                                                           ),
@@ -832,12 +872,11 @@ class _ViewProfilePageOtherWidgetState
                                                                           .max,
                                                                   children: [
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              0,
-                                                                              2,
-                                                                              8,
-                                                                              0),
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                                                          0.0,
+                                                                          2.0,
+                                                                          8.0,
+                                                                          0.0),
                                                                       child:
                                                                           Text(
                                                                         dateTimeFormat(
@@ -848,7 +887,7 @@ class _ViewProfilePageOtherWidgetState
                                                                               FFLocalizations.of(context).languageCode,
                                                                         ),
                                                                         style: FlutterFlowTheme.of(context)
-                                                                            .bodyText1,
+                                                                            .bodyMedium,
                                                                       ),
                                                                     ),
                                                                     Icon(
@@ -856,7 +895,8 @@ class _ViewProfilePageOtherWidgetState
                                                                           .ios_share,
                                                                       color: Color(
                                                                           0xFF95A1AC),
-                                                                      size: 24,
+                                                                      size:
+                                                                          24.0,
                                                                     ),
                                                                   ],
                                                                 ),
@@ -867,10 +907,10 @@ class _ViewProfilePageOtherWidgetState
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        2,
-                                                                        4,
-                                                                        0,
-                                                                        0),
+                                                                        2.0,
+                                                                        4.0,
+                                                                        0.0,
+                                                                        0.0),
                                                             child: Row(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -881,10 +921,10 @@ class _ViewProfilePageOtherWidgetState
                                                                       Padding(
                                                                     padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
-                                                                            12,
-                                                                            0,
-                                                                            12,
-                                                                            12),
+                                                                            12.0,
+                                                                            0.0,
+                                                                            12.0,
+                                                                            12.0),
                                                                     child: Text(
                                                                       valueOrDefault<
                                                                           String>(
@@ -894,14 +934,14 @@ class _ViewProfilePageOtherWidgetState
                                                                       ),
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
-                                                                          .bodyText1
+                                                                          .bodyMedium
                                                                           .override(
                                                                             fontFamily:
                                                                                 'Lexend Deca',
                                                                             color:
                                                                                 Color(0xFF090F13),
                                                                             fontSize:
-                                                                                14,
+                                                                                14.0,
                                                                             fontWeight:
                                                                                 FontWeight.normal,
                                                                           ),

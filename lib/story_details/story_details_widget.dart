@@ -1,14 +1,17 @@
-import '../backend/backend.dart';
-import '../components/comments_widget.dart';
-import '../components/delete_story_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+import '/backend/backend.dart';
+import '/components/comments_widget.dart';
+import '/components/delete_story_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'story_details_model.dart';
+export 'story_details_model.dart';
 
 class StoryDetailsWidget extends StatefulWidget {
   const StoryDetailsWidget({
@@ -23,21 +26,35 @@ class StoryDetailsWidget extends StatefulWidget {
 }
 
 class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
-  PageController? pageViewController;
+  late StoryDetailsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  int get pageViewCurrentIndex => _model.pageViewController != null &&
+          _model.pageViewController!.hasClients &&
+          _model.pageViewController!.page != null
+      ? _model.pageViewController!.page!.round()
+      : 0;
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => StoryDetailsModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Title(
         title: 'storyDetails',
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: FlutterFlowTheme.of(context).primary,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryDark,
@@ -53,30 +70,39 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 50.0,
+                            height: 50.0,
                             child: CircularProgressIndicator(
-                              color: FlutterFlowTheme.of(context).primaryColor,
+                              color: FlutterFlowTheme.of(context).primary,
                             ),
                           ),
                         );
                       }
                       List<UserStoriesRecord> pageViewUserStoriesRecordList =
                           snapshot.data!;
+                      if (pageViewUserStoriesRecordList.isEmpty) {
+                        return Center(
+                          child: Image.asset(
+                            'assets/images/SIGCE_Name_White.png',
+                            width: double.infinity,
+                          ),
+                        );
+                      }
                       return Container(
                         width: double.infinity,
                         height: double.infinity,
                         child: Stack(
                           children: [
                             PageView.builder(
-                              controller: pageViewController ??= PageController(
-                                  initialPage: min(
-                                      valueOrDefault<int>(
-                                        widget.initialStoryIndex,
-                                        0,
-                                      ),
-                                      pageViewUserStoriesRecordList.length -
-                                          1)),
+                              controller: _model.pageViewController ??=
+                                  PageController(
+                                      initialPage: min(
+                                          valueOrDefault<int>(
+                                            widget.initialStoryIndex,
+                                            0,
+                                          ),
+                                          pageViewUserStoriesRecordList.length -
+                                              1)),
                               scrollDirection: Axis.vertical,
                               itemCount: pageViewUserStoriesRecordList.length,
                               itemBuilder: (context, pageViewIndex) {
@@ -94,7 +120,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                         children: [
                                           ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(8),
+                                                BorderRadius.circular(8.0),
                                             child: Image.network(
                                               valueOrDefault<String>(
                                                 pageViewUserStoriesRecord
@@ -102,18 +128,19 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                 'https://images.shiksha.com/mediadata/images/1589784998phpFLlyPi.jpeg',
                                               ),
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
+                                                      .size
+                                                      .width *
+                                                  1.0,
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height *
-                                                  1,
+                                                  1.0,
                                               fit: BoxFit.cover,
                                             ),
                                           ),
                                           Align(
                                             alignment:
-                                                AlignmentDirectional(0, 0),
+                                                AlignmentDirectional(0.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
@@ -122,7 +149,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                               children: [
                                                 Container(
                                                   width: double.infinity,
-                                                  height: 102,
+                                                  height: 102.0,
                                                   decoration: BoxDecoration(
                                                     gradient: LinearGradient(
                                                       colors: [
@@ -131,12 +158,12 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                             .primaryDark,
                                                         Color(0x001A1F24)
                                                       ],
-                                                      stops: [0, 1],
+                                                      stops: [0.0, 1.0],
                                                       begin:
                                                           AlignmentDirectional(
-                                                              0, -1),
+                                                              0.0, -1.0),
                                                       end: AlignmentDirectional(
-                                                          0, 1),
+                                                          0, 1.0),
                                                     ),
                                                   ),
                                                   child: Column(
@@ -146,8 +173,11 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(16,
-                                                                    12, 16, 36),
+                                                                .fromSTEB(
+                                                                    16.0,
+                                                                    12.0,
+                                                                    16.0,
+                                                                    36.0),
                                                         child: StreamBuilder<
                                                             UsersRecord>(
                                                           stream: UsersRecord
@@ -161,13 +191,13 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                 .hasData) {
                                                               return Center(
                                                                 child: SizedBox(
-                                                                  width: 50,
-                                                                  height: 50,
+                                                                  width: 50.0,
+                                                                  height: 50.0,
                                                                   child:
                                                                       CircularProgressIndicator(
                                                                     color: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .primaryColor,
+                                                                        .primary,
                                                                   ),
                                                                 ),
                                                               );
@@ -183,8 +213,8 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                       .center,
                                                               children: [
                                                                 Container(
-                                                                  width: 40,
-                                                                  height: 40,
+                                                                  width: 40.0,
+                                                                  height: 40.0,
                                                                   clipBehavior:
                                                                       Clip.antiAlias,
                                                                   decoration:
@@ -218,10 +248,10 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                     children: [
                                                                       Padding(
                                                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            12,
-                                                                            0,
-                                                                            0,
-                                                                            0),
+                                                                            12.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                         child:
                                                                             Text(
                                                                           valueOrDefault<
@@ -230,29 +260,29 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                             'Good Dog',
                                                                           ),
                                                                           style: FlutterFlowTheme.of(context)
-                                                                              .bodyText1
+                                                                              .bodyMedium
                                                                               .override(
                                                                                 fontFamily: 'Urbanist',
-                                                                                color: FlutterFlowTheme.of(context).tertiaryColor,
+                                                                                color: FlutterFlowTheme.of(context).tertiary,
                                                                               ),
                                                                         ),
                                                                       ),
                                                                       Padding(
                                                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            12,
-                                                                            4,
-                                                                            0,
-                                                                            0),
+                                                                            12.0,
+                                                                            4.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                         child:
                                                                             Text(
                                                                           userInfoUsersRecord
                                                                               .userName!,
                                                                           style: FlutterFlowTheme.of(context)
-                                                                              .bodyText1
+                                                                              .bodyMedium
                                                                               .override(
                                                                                 fontFamily: 'Urbanist',
-                                                                                color: FlutterFlowTheme.of(context).tertiaryColor,
-                                                                                fontSize: 12,
+                                                                                color: FlutterFlowTheme.of(context).tertiary,
+                                                                                fontSize: 12.0,
                                                                               ),
                                                                         ),
                                                                       ),
@@ -272,7 +302,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                         RoundedRectangleBorder(
                                                                       borderRadius:
                                                                           BorderRadius.circular(
-                                                                              60),
+                                                                              60.0),
                                                                     ),
                                                                     child:
                                                                         FlutterFlowIconButton(
@@ -280,9 +310,9 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                           Colors
                                                                               .transparent,
                                                                       borderRadius:
-                                                                          30,
+                                                                          30.0,
                                                                       buttonSize:
-                                                                          46,
+                                                                          46.0,
                                                                       icon:
                                                                           Icon(
                                                                         Icons
@@ -290,21 +320,25 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .grayIcon,
                                                                         size:
-                                                                            20,
+                                                                            20.0,
                                                                       ),
                                                                       onPressed:
                                                                           () async {
                                                                         await showModalBottomSheet(
                                                                           isScrollControlled:
                                                                               true,
+                                                                          backgroundColor:
+                                                                              Color(0x00000000),
+                                                                          barrierColor:
+                                                                              Color(0x00000000),
                                                                           context:
                                                                               context,
                                                                           builder:
-                                                                              (context) {
+                                                                              (bottomSheetContext) {
                                                                             return Padding(
-                                                                              padding: MediaQuery.of(context).viewInsets,
+                                                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                                                               child: Container(
-                                                                                height: 240,
+                                                                                height: 240.0,
                                                                                 child: DeleteStoryWidget(
                                                                                   storyDetails: pageViewUserStoriesRecord,
                                                                                 ),
@@ -326,7 +360,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:
                                                                         BorderRadius.circular(
-                                                                            60),
+                                                                            60.0),
                                                                   ),
                                                                   child:
                                                                       FlutterFlowIconButton(
@@ -334,16 +368,17 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                         Colors
                                                                             .transparent,
                                                                     borderRadius:
-                                                                        30,
+                                                                        30.0,
                                                                     buttonSize:
-                                                                        46,
+                                                                        46.0,
                                                                     icon: Icon(
                                                                       Icons
                                                                           .close_rounded,
                                                                       color: FlutterFlowTheme.of(
                                                                               context)
                                                                           .grayIcon,
-                                                                      size: 20,
+                                                                      size:
+                                                                          20.0,
                                                                     ),
                                                                     onPressed:
                                                                         () async {
@@ -362,7 +397,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                 ),
                                                 Container(
                                                   width: double.infinity,
-                                                  height: 100,
+                                                  height: 100.0,
                                                   decoration: BoxDecoration(
                                                     gradient: LinearGradient(
                                                       colors: [
@@ -371,12 +406,12 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                 context)
                                                             .primaryDark
                                                       ],
-                                                      stops: [0, 1],
+                                                      stops: [0.0, 1.0],
                                                       begin:
                                                           AlignmentDirectional(
-                                                              0, -1),
+                                                              0.0, -1.0),
                                                       end: AlignmentDirectional(
-                                                          0, 1),
+                                                          0, 1.0),
                                                     ),
                                                   ),
                                                   child: Column(
@@ -391,8 +426,11 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(16,
-                                                                    16, 16, 16),
+                                                                .fromSTEB(
+                                                                    16.0,
+                                                                    16.0,
+                                                                    16.0,
+                                                                    16.0),
                                                         child: Text(
                                                           valueOrDefault<
                                                               String>(
@@ -404,13 +442,13 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                               TextAlign.start,
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .bodyText1
+                                                              .bodyMedium
                                                               .override(
                                                                 fontFamily:
                                                                     'Urbanist',
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .tertiaryColor,
+                                                                    .tertiary,
                                                               ),
                                                         ),
                                                       ),
@@ -425,22 +463,29 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 12, 16, 8),
+                                          16.0, 12.0, 16.0, 8.0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
                                             onTap: () async {
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
+                                                backgroundColor:
+                                                    Color(0x00000000),
+                                                barrierColor: Color(0x00000000),
                                                 context: context,
-                                                builder: (context) {
+                                                builder: (bottomSheetContext) {
                                                   return Padding(
-                                                    padding:
-                                                        MediaQuery.of(context)
-                                                            .viewInsets,
+                                                    padding: MediaQuery.of(
+                                                            bottomSheetContext)
+                                                        .viewInsets,
                                                     child: Container(
-                                                      height: 600,
+                                                      height: 600.0,
                                                       child: CommentsWidget(
                                                         story:
                                                             pageViewUserStoriesRecord,
@@ -458,25 +503,26 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                   Icons.mode_comment_outlined,
                                                   color: FlutterFlowTheme.of(
                                                           context)
-                                                      .tertiaryColor,
-                                                  size: 24,
+                                                      .tertiary,
+                                                  size: 24.0,
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(8, 0, 0, 0),
+                                                      .fromSTEB(
+                                                          8.0, 0.0, 0.0, 0.0),
                                                   child: Text(
                                                     pageViewUserStoriesRecord
                                                         .numComments!
                                                         .toString(),
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Urbanist',
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .tertiaryColor,
+                                                              .tertiary,
                                                         ),
                                                   ),
                                                 ),
@@ -490,23 +536,30 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                   MainAxisAlignment.end,
                                               children: [
                                                 if (!isWeb)
-                                                  FlutterFlowIconButton(
-                                                    borderColor:
-                                                        Colors.transparent,
-                                                    borderRadius: 30,
-                                                    buttonSize: 48,
-                                                    icon: Icon(
-                                                      Icons.bookmark_border,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .tertiaryColor,
-                                                      size: 30,
+                                                  Builder(
+                                                    builder: (context) =>
+                                                        FlutterFlowIconButton(
+                                                      borderColor:
+                                                          Colors.transparent,
+                                                      borderRadius: 30.0,
+                                                      buttonSize: 48.0,
+                                                      icon: Icon(
+                                                        Icons.bookmark_border,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        size: 30.0,
+                                                      ),
+                                                      onPressed: () async {
+                                                        await Share.share(
+                                                          'This post is really awesome!',
+                                                          sharePositionOrigin:
+                                                              getWidgetBoundingBox(
+                                                                  context),
+                                                        );
+                                                      },
                                                     ),
-                                                    onPressed: () async {
-                                                      await Share.share(
-                                                          'This post is really awesome!');
-                                                    },
                                                   ),
                                               ],
                                             ),
@@ -521,11 +574,11 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                             Align(
                               alignment: AlignmentDirectional(0.95, 0.7),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 10.0),
                                 child:
                                     smooth_page_indicator.SmoothPageIndicator(
-                                  controller: pageViewController ??=
+                                  controller: _model.pageViewController ??=
                                       PageController(
                                           initialPage: min(
                                               valueOrDefault<int>(
@@ -537,8 +590,9 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                   1)),
                                   count: pageViewUserStoriesRecordList.length,
                                   axisDirection: Axis.vertical,
-                                  onDotClicked: (i) {
-                                    pageViewController!.animateToPage(
+                                  onDotClicked: (i) async {
+                                    await _model.pageViewController!
+                                        .animateToPage(
                                       i,
                                       duration: Duration(milliseconds: 500),
                                       curve: Curves.ease,
@@ -546,14 +600,14 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                   },
                                   effect:
                                       smooth_page_indicator.ExpandingDotsEffect(
-                                    expansionFactor: 2,
-                                    spacing: 8,
-                                    radius: 16,
-                                    dotWidth: 8,
-                                    dotHeight: 4,
+                                    expansionFactor: 2.0,
+                                    spacing: 8.0,
+                                    radius: 16.0,
+                                    dotWidth: 8.0,
+                                    dotHeight: 4.0,
                                     dotColor: Color(0x65DBE2E7),
-                                    activeDotColor: FlutterFlowTheme.of(context)
-                                        .tertiaryColor,
+                                    activeDotColor:
+                                        FlutterFlowTheme.of(context).tertiary,
                                     paintStyle: PaintingStyle.fill,
                                   ),
                                 ),
